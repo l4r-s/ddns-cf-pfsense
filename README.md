@@ -23,6 +23,7 @@ This script will get the current wan IP address (from vtnet0) and updates the cl
       ~~~~
 
 4. Set the following variables in the script:
+
   ~~~~bash
   USERNAME="your Cloudflare Username"
   APIKEY="your Cldoudflare API key (from the dashboard)"
