@@ -8,14 +8,13 @@ This script will get the current wan IP address (from vtnet0) and updates the cl
 2. Greate your desired record with the cloudflare dashboard and set the content to 127.0.0.1
 3. Execute the following snippet (change stuff in [])
 
-  ~~~~bash
-  curl -X GET "https://api.cloudflare.com/client/v4/zones/[ZONEID]/dns_records?type=A&name=[recordname]&content=127.0.0.1&page=1&per_page=20&order=type&direction=desc&match=all" \
+    ~~~~bash
+    curl -X GET "https://api.cloudflare.com/client/v4/zones/[ZONEID]/dns_records?type=A&name=[recordname]&content=127.0.0.1&page=1&per_page=20&order=type&direction=desc&match=all" \
      -H "X-Auth-Email: [Cloudflare Username]" \
      -H "X-Auth-Key: [Cloudflare API KEY]" \
      -H "Content-Type: application/json"
-    ~~~~
-    Example:
-    ~~~~bash
+
+    ## Example:
     curl -X GET
     "https://api.cloudflare.com/client/v4/zones/324r5431b34e321ed32ddewdwe3a533148d/dns_records?type=A&name=ddns.example.com&content=127.0.0.1&page=1&per_page=20&order=type&direction=desc&match=all"
        -H "X-Auth-Email: joe@example.com" \
