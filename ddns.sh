@@ -1,23 +1,28 @@
 #!/bin/sh
-# pfsense ddns to cloudflare script
+# pfsense/opnsense ddns to cloudflare script
 
-USERNAME="cf-username"
-APIKEY="cf-api-token"
-ZONEID="cf-zone-id"
-RECORDID="cf-record-id"
+INTERFACE="wan-interface"
+APIKEY="cloudflare-api-key"
+ZONEID="cloudflare-api-zone-id"
+RECORDID="cloudflare-api-record-id"
 LOGFILE="ddns.log"
 
-IP=`ifconfig vtnet0 | grep "inet " | awk '{ print $2 }'`
+ipv4=`ifconfig ${INTERFACE} | grep "inet " | awk '{ print $2 }'`
 
-DATA1='{"type":"A","name":"hostname.example.com","content":"'
-DATA2='","ttl":120,"proxied":false}'
+data1='{"type":"A","name":"h.l4rs.net","content":"'
+data2='","ttl":120,"proxied":false}'
+data_ipv4="${data1}${ipv4}${data2}"
 
-DATA="$DATA1$IP$DATA2"
-echo "------------------------------" >> $LOGFILE
-date >> $LOGFILE
-curl -X PUT "https://api.cloudflare.com/client/v4/zones/$ZONEID/dns_records/$RECORDID" \
-     -H "X-Auth-Email: $USERNAME" \
-     -H "X-Auth-Key: $APIKEY" \
+resp=$(curl -X PUT "https://api.cloudflare.com/client/v4/zones/${ZONEID}/dns_records/${RECORDID}" \
+     -H "Authorization: Bearer ${APIKEY}" \
      -H "Content-Type: application/json" \
-     --data $DATA >> $LOGFILE
-echo "" >> $LOGFILE
+     --data ${data_ipv4})
+
+success="$(echo ${resp} | jq .success)"
+
+if [ "${success}" = "true" ]; then
+    echo "$(date) - ${ipv4} - ddns successfull" >> ${LOGFILE}
+else
+    echo "$(date) - ${ipv4} - ddns failed: ${resp}" >> ${LOGFILE}
+fi
+

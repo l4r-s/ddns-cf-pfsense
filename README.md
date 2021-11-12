@@ -10,9 +10,8 @@ This script will get the current wan IP address (from vtnet0) and updates the cl
 
     ~~~~bash
     curl -X GET "https://api.cloudflare.com/client/v4/zones/[ZONEID]/dns_records?type=A&name=[recordname]&content=127.0.0.1&page=1&per_page=20&order=type&direction=desc&match=all" \
-     -H "X-Auth-Email: [Cloudflare Username]" \
-     -H "X-Auth-Key: [Cloudflare API KEY]" \
-     -H "Content-Type: application/json"
+    -H "Authorization: Bearer [API token with DNS zone edit permission]" \
+    -H "Content-Type: application/json"
 
     ## Example:
     curl -X GET
